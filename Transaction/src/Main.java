@@ -17,7 +17,7 @@ public class Main {
 				System.out.println(e);
 			}
 		Transaction transaction=new Transaction();
-		transaction.Transfer("acc1","acc2",3000,conn,stmt);
+		transaction.Transfer("acc1","acc3",500,conn,stmt);
 			
 	}
 }

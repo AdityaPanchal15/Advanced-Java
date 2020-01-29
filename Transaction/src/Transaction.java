@@ -24,16 +24,18 @@ public boolean Transfer(String acc1,String acc2,int amount,Connection connection
 	
 }
 
-public boolean deposit(String acc2,int amount,Connection connection,Statement stmt) {
+private boolean deposit(String acc2,int amount,Connection connection,Statement stmt) {
+	int amount1=0;
 	try {
 	stmt=connection.createStatement();
-	ResultSet rs=stmt.executeQuery("select amount from bank where Account='"+acc2+"'");
+	ResultSet rs=stmt.executeQuery("select * from bank");
 	while(rs.next()) {
-    	if(rs.getString(1)==acc2)
-    		amount=amount+rs.getInt(2);
+    	if((rs.getString(1)).equals(acc2)) {
+    		amount1=amount+rs.getInt(2);
+    	}
     }
 	
-	stmt.execute("update bank SET amount='"+amount+"' WHERE Account='"+acc2+"'");
+	stmt.execute("update bank SET amount='"+amount1+"' WHERE Account='"+acc2+"'");
 	
 	}catch(Exception e) {
 		
@@ -42,16 +44,18 @@ public boolean deposit(String acc2,int amount,Connection connection,Statement st
 	return true;
 }
 
-public boolean withdraw(String acc1,int amount,Connection connection,Statement stmt) throws SQLException {
+private boolean withdraw(String acc1,int amount,Connection connection,Statement stmt) throws SQLException {
 	int amount1 = 0;
 	
 	stmt=connection.createStatement();
-	ResultSet rs=stmt.executeQuery("select amount from bank where Account='"+acc1+"'");
+	ResultSet rs=stmt.executeQuery("select * from bank");
     while(rs.next()) {
-    	if(rs.getString(1)==acc1)
-    		amount1=amount-rs.getInt(2);
+    	if((rs.getString(1)).equals(acc1)) {
+    		amount1=rs.getInt(2)-amount;
+    	}
     }
-	if(amount1<=0) {
+    
+	if(amount1>=0) {
 		stmt.execute("update bank SET amount='"+amount1+"' WHERE Account='"+acc1+"'");
 		return true;
 	}else {
